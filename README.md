@@ -1,4 +1,4 @@
-# VaccinatedCovid_API - Apresentado dados de cada País
+# VaccinatedCovid_API - Apresentando dados de cada País
  
 ## Api
 
