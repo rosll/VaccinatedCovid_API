@@ -1,5 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
+
+interface FormProps {
+  hasError: boolean;
+}
 
 export const Title = styled.h2`
   font-size: 36px;
@@ -7,7 +11,7 @@ export const Title = styled.h2`
   line-height: 40px;
 `;
 
-export const Form = styled.form`
+export const Form = styled.form<FormProps>`
   margin-top: 40px;
   max-width: 800px;
   display: flex;
@@ -20,6 +24,15 @@ export const Form = styled.form`
     border-radius: 7px 0 0 7px;
     color: #595959;
     background: #f2f2f2;
+    border: 3px solid #f2f2f2;
+    border-right: 0;
+
+    ${props =>
+      props.hasError &&
+      css`
+        border-color: #ff1a1a;
+      `}
+
     &::placeholder {
       color: #999999;
     }
@@ -38,6 +51,12 @@ export const Form = styled.form`
       background: ${shade(0.6, '#595959')};
     }
   }
+`;
+
+export const Error = styled.span`
+  display: block;
+  color: #ff1a1a;
+  margin-top: 8px;
 `;
 
 export const Countries = styled.div`
@@ -80,6 +99,10 @@ export const Countries = styled.div`
       margin-top: 6px;
       margin-left: 50%;
       color: #000000;
+
+      &:hover {
+        color: #4d4d4d;
+      }
     }
   }
 `;

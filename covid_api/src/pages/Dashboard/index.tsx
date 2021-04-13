@@ -1,45 +1,79 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
 import { FiChevronsDown } from 'react-icons/fi';
-import { Title, Form, Countries } from './styles';
+import { Link } from 'react-router-dom';
+import { Title, Form, Countries, Error } from './styles';
+import api from '../../services/api';
 
-const Dashboard: React.FC = () => (
-  <>
-    <Title>Dados de vacinas da COVID-19</Title>
+interface Country {
+  All: {
+    country: string;
+    capital_city: string;
+    continent: string;
+    updated: string;
+    abbreviation: string;
+  };
+}
 
-    <Form>
-      <input placeholder="Insira o nome de um país" />
-      <button type="submit">Procurar</button>
-    </Form>
+const Dashboard: React.FC = () => {
+  const [newCountry, setNewCountry] = useState('');
+  const [formError, setFormError] = useState('');
+  const [countries, setCountries] = useState<Country[]>([]);
 
-    <Countries>
-      <a href="teste">
-        <div>
-          <strong>Brazil</strong>
-          <p>Capital: Brasília</p>
-          <p>Continente: South America</p>
-          <p>Última atualização: 2021/04/11</p>
-        </div>
-        <FiChevronsDown size={23} />
-      </a>
-      <a href="teste">
-        <div>
-          <strong>Brazil</strong>
-          <p>Capital: Brasília</p>
-          <p>Continente: South America</p>
-          <p>Última atualização: 2021/04/11</p>
-        </div>
-        <FiChevronsDown size={23} />
-      </a>
-      <a href="teste">
-        <div>
-          <strong>Brazil</strong>
-          <p>Capital: Brasília</p>
-          <p>Continente: South America</p>
-          <p>Última atualização: 2021/04/11</p>
-        </div>
-        <FiChevronsDown size={23} />
-      </a>
-    </Countries>
-  </>
-);
+  async function AddCountry(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!newCountry) {
+      setFormError('Insira o nome de um país');
+      return;
+    }
+
+    try {
+      const response = await api.get<Country>(`vaccines?country=${newCountry}`);
+
+      const country = response.data;
+
+      setCountries([country]);
+      setNewCountry('');
+      setFormError('');
+    } catch (err) {
+      setFormError(
+        'Ocorreu um erro na busca deste país. Escreve em Inglês o nome de algum país',
+      );
+    }
+  }
+
+  return (
+    <>
+      <Title>Dados de vacinas da COVID-19</Title>
+
+      <Form hasError={!!formError} onSubmit={AddCountry}>
+        <input
+          value={newCountry}
+          onChange={event => setNewCountry(event.target.value)}
+          placeholder="Insira o nome de um país"
+        />
+        <button type="submit">Procurar</button>
+      </Form>
+
+      {formError && <Error>{formError}</Error>}
+
+      <Countries>
+        {countries.map(country => (
+          <Link
+            key={country.All.country}
+            to={`/details/${country.All.country}`}
+          >
+            <div>
+              <strong>{country.All.country} </strong>
+              <strong>{country.All.abbreviation}</strong>
+              <p>Capital: {country.All.capital_city}</p>
+              <p>Continente: {country.All.continent}</p>
+            </div>
+            <FiChevronsDown size={23} />
+          </Link>
+        ))}
+      </Countries>
+    </>
+  );
+};
 export default Dashboard;
