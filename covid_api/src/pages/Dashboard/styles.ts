@@ -71,8 +71,6 @@ export const Countries = styled.div`
     display: block;
     text-decoration: none;
     transition: transform 0.6s;
-    /* display: flex;
-    align-items: center; */
 
     &:hover {
       transform: translateY(15px);

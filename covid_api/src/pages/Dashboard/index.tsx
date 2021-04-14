@@ -50,7 +50,7 @@ const Dashboard: React.FC = () => {
         <input
           value={newCountry}
           onChange={event => setNewCountry(event.target.value)}
-          placeholder="Insira o nome de um país"
+          placeholder="Insira o nome de um país (Exemplo: Netherlands; Canada; Brazil.)"
         />
         <button type="submit">Procurar</button>
       </Form>
