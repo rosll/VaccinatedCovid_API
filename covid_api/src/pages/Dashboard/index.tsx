@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Title>Dados de vacinas da COVID-19</Title>
+      <Title>Dados de vacinas COVID-19</Title>
 
       <Form hasError={!!formError} onSubmit={AddCountry}>
         <input
